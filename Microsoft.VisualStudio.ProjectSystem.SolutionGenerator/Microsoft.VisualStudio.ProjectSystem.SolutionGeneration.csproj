@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <AssemblyName>Microsoft.VisualStudio.ProjectSystem.SolutionGeneration</AssemblyName>
+    <RootNamespace>Microsoft.VisualStudio.ProjectSystem.SolutionGeneration</RootNamespace>
+  </PropertyGroup>
+
+</Project>
