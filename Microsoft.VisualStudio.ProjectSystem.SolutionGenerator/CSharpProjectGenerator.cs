@@ -49,6 +49,7 @@ namespace Microsoft.VisualStudio.ProjectSystem.SolutionGeneration
             writer.WriteLine($@"<Project Sdk=""Microsoft.NET.Sdk"">
 
   <!-- This is a generated file -->
+  <!-- https://github.com/drewnoakes/solution-generator -->
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
@@ -62,6 +63,7 @@ namespace Microsoft.VisualStudio.ProjectSystem.SolutionGeneration
         private static void GenerateSourceFile(StreamWriter writer, string projectName, int itemNumber)
         {
             writer.WriteLine($@"// This is a generated file
+// https://github.com/drewnoakes/solution-generator
 
 namespace {projectName}
 {{
