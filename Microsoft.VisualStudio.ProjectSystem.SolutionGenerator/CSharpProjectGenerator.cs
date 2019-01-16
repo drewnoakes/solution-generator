@@ -24,7 +24,7 @@ namespace Microsoft.VisualStudio.ProjectSystem.SolutionGeneration
 
                 Directory.CreateDirectory(projectPath);
 
-                using (var stream = File.OpenWrite(Path.Combine(projectPath, projectFileName)))
+                using (var stream = new FileStream(Path.Combine(projectPath, projectFileName), FileMode.Create, FileAccess.Write, FileShare.Read))
                 using (var writer = new StreamWriter(stream, Encoding.ASCII))
                 {
                     GenerateProjectFile(writer, projectName);
@@ -35,7 +35,7 @@ namespace Microsoft.VisualStudio.ProjectSystem.SolutionGeneration
                     var itemFile = $"Class{itemNumber}.cs";
                     var itemPath = Path.Combine(projectPath, itemFile);
 
-                    using (var stream = new FileStream(itemPath, FileMode.Truncate, FileAccess.Write, FileShare.Read))
+                    using (var stream = new FileStream(itemPath, FileMode.Create, FileAccess.Write, FileShare.Read))
                     using (var writer = new StreamWriter(stream, Encoding.ASCII))
                     {
                         GenerateSourceFile(writer, projectName, itemNumber);
