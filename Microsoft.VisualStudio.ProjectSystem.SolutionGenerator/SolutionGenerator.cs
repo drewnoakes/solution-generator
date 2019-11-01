@@ -7,13 +7,24 @@ namespace Microsoft.VisualStudio.ProjectSystem.SolutionGeneration
 {
     public sealed class SolutionGenerator
     {
-        public void Generate(IEnumerable<IProjectGenerator> generators, string solutionPath)
+        public void Generate(int projectCount, IProjectGenerator generator, IEnumerable<IProjectModifier> modifiers, string solutionPath)
         {
-            var projects = new List<(string projectName, string relativeProjectPath, Guid projectType, Guid projectGuid)>();
+            var projects = new List<IProject>();
 
-            foreach (var generator in generators)
+            for (var i = 0; i < projectCount; i++)
             {
-                generator.Generate(solutionPath, projects);
+                var project = generator.Generate(i);
+
+                Directory.CreateDirectory(Path.Combine(solutionPath, project.RelativeProjectPath));
+
+                foreach (var modifier in modifiers)
+                {
+                    modifier.Modify(project, projects, solutionPath);
+                }
+
+                project.ProjectXml.Save(Path.Combine(solutionPath, project.RelativeProjectFilePath));
+                
+                projects.Add(project);
             }
 
             using (var stream = File.OpenWrite(Path.Combine(solutionPath, $"{Path.GetFileName(solutionPath)}.sln")))
@@ -25,10 +36,10 @@ namespace Microsoft.VisualStudio.ProjectSystem.SolutionGeneration
 VisualStudioVersion = 15.0.28010.2019
 MinimumVisualStudioVersion = 10.0.40219.1");
 
-                foreach ((string projectName, string relativeProjectPath, Guid projectType, Guid projectGuid) in projects)
+                foreach (IProject project in projects)
                 {
                     writer.WriteLine(
-$@"Project(""{projectType:B}"") = ""{projectName}"", ""{relativeProjectPath}"", ""{projectGuid:B}""
+$@"Project(""{project.ProjectType:B}"") = ""{project.ProjectName}"", ""{project.RelativeProjectFilePath}"", ""{project.ProjectGuid:B}""
 EndProject");
                 }
 
@@ -39,15 +50,16 @@ EndProject");
         Release|Any CPU = Release|Any CPU
     EndGlobalSection
     GlobalSection(ProjectConfigurationPlatforms) = postSolution");
-                foreach ((_, _, _, Guid projectGuid) in projects)
+                foreach (var project in projects)
                 {
                     writer.WriteLine(
-$@"        {projectGuid:B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-        {projectGuid:B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-        {projectGuid:B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-        {projectGuid:B}.Release|Any CPU.Build.0 = Release|Any CPU");
+$@"        {project.ProjectGuid:B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {project.ProjectGuid:B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {project.ProjectGuid:B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {project.ProjectGuid:B}.Release|Any CPU.Build.0 = Release|Any CPU");
                 }
-                                writer.WriteLine(
+                
+                writer.WriteLine(
 $@"    EndGlobalSection
     GlobalSection(SolutionProperties) = preSolution
         HideSolutionNode = FALSE

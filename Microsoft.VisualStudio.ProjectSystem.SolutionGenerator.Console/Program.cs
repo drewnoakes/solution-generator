@@ -7,15 +7,15 @@
         public static void Main()
         {
             new SolutionGenerator().Generate(
-                new[]
+                projectCount: 20,
+                new SdkProjectGenerator("netcoreapp2.1"),
+                new IProjectModifier[]
                 {
-                    new CSharpProjectGenerator
-                    {
-                        ProjectCount = 20,
-                        ItemPerProjectCount = 20
-                    }
+                    new CSharpClassFileCreator(itemCount: 10),
+                    new MaximalProjectToProjectReferences(),
+                    new PackageReferences("MetadataExtractor", "2.2.0")
                 },
-                @"c:\Users\drew\dev\ms\generated-solutions\Solution1");
+                @"d:\generated-solutions\maximal-p2p-20");
         }
     }
 }
