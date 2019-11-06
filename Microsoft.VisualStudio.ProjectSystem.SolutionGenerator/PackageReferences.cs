@@ -16,12 +16,11 @@ namespace Microsoft.VisualStudio.ProjectSystem.SolutionGeneration
 
         public void Modify(IProject project, IReadOnlyList<IProject> priorProjects, string solutionPath)
         {
-            foreach (var priorProject in priorProjects)
-            {
-                project.AddItem(new XElement("PackageReference",
+            project.AddItem(
+                new XElement(
+                    "PackageReference",
                     new XAttribute("Include", _id),
                     new XAttribute("Version", _version)));
-            }
         }
     }
 }
