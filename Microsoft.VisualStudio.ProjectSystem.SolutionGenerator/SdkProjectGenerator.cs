@@ -45,9 +45,9 @@ namespace Microsoft.VisualStudio.ProjectSystem.SolutionGeneration
                 ProjectXml = new XDocument(
                     new XElement(
                         "Project",
-                        new XAttribute("Sdk", sdk)),
-                    new XComment("This is a generated file"),
-                    new XComment("https://github.com/drewnoakes/solution-generator"));
+                        new XAttribute("Sdk", sdk),
+                        new XComment("This is a generated file"),
+                        new XComment("https://github.com/drewnoakes/solution-generator")));
 
                 if (!string.IsNullOrWhiteSpace(targetFrameworks))
                 {
