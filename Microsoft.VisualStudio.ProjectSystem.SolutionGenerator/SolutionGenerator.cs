@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Xml;
 
 namespace Microsoft.VisualStudio.ProjectSystem.SolutionGeneration
 {
@@ -22,7 +23,9 @@ namespace Microsoft.VisualStudio.ProjectSystem.SolutionGeneration
                     modifier.Modify(project, projects, solutionPath);
                 }
 
-                project.ProjectXml.Save(Path.Combine(solutionPath, project.RelativeProjectFilePath));
+                using var stream = new FileStream(Path.Combine(solutionPath, project.RelativeProjectFilePath), FileMode.Create);
+                using var writer = XmlWriter.Create(stream, new XmlWriterSettings { OmitXmlDeclaration = true, Indent = true, IndentChars = "  " });
+                project.ProjectXml.Save(writer);
                 
                 projects.Add(project);
             }
