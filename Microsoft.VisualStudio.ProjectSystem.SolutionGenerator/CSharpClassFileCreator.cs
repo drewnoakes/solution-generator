@@ -2,43 +2,39 @@
 using System.IO;
 using System.Text;
 
-namespace Microsoft.VisualStudio.ProjectSystem.SolutionGeneration
+namespace Microsoft.VisualStudio.ProjectSystem.SolutionGeneration;
+
+public class CSharpClassFileCreator(int itemCount) : IProjectModifier
 {
-    public class CSharpClassFileCreator : IProjectModifier
+    private readonly int _itemCount = itemCount;
+
+    public void Modify(IProject project, IReadOnlyList<IProject> priorProjects, string solutionPath)
     {
-        private readonly int _itemCount;
-
-        public CSharpClassFileCreator(int itemCount)
+        for (var itemNumber = 1; itemNumber <= _itemCount; itemNumber++)
         {
-            _itemCount = itemCount;
+            var itemFile = $"Class{itemNumber}.cs";
+            var itemPath = Path.Combine(solutionPath, project.RelativeProjectPath, itemFile);
+
+            using var stream = new FileStream(itemPath, FileMode.Create, FileAccess.Write, FileShare.Read);
+            using var writer = new StreamWriter(stream, Encoding.ASCII);
+
+            GenerateSourceFile(writer, project.ProjectName, itemNumber);
         }
+    }
 
-        public void Modify(IProject project, IReadOnlyList<IProject> priorProjects, string solutionPath)
-        {
-            for (var itemNumber = 1; itemNumber <= _itemCount; itemNumber++)
+    private static void GenerateSourceFile(StreamWriter writer, string projectName, int itemNumber)
+    {
+        writer.WriteLine(
+            $$"""
+            // This is a generated file
+            // https://github.com/drewnoakes/solution-generator
+
+            namespace {{projectName}}
             {
-                var itemFile = $"Class{itemNumber}.cs";
-                var itemPath = Path.Combine(solutionPath, project.RelativeProjectPath, itemFile);
-
-                using (var stream = new FileStream(itemPath, FileMode.Create, FileAccess.Write, FileShare.Read))
-                using (var writer = new StreamWriter(stream, Encoding.ASCII))
+                public class Class{{itemNumber}}
                 {
-                    GenerateSourceFile(writer, project.ProjectName, itemNumber);
                 }
             }
-        }
-
-        private static void GenerateSourceFile(StreamWriter writer, string projectName, int itemNumber)
-        {
-            writer.WriteLine($@"// This is a generated file
-// https://github.com/drewnoakes/solution-generator
-
-namespace {projectName}
-{{
-    public class Class{itemNumber}
-    {{
-    }}
-}}");
-        }
+            """);
     }
 }

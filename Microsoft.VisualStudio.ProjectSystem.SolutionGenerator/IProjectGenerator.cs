@@ -1,7 +1,6 @@
-﻿namespace Microsoft.VisualStudio.ProjectSystem.SolutionGeneration
+﻿namespace Microsoft.VisualStudio.ProjectSystem.SolutionGeneration;
+
+public interface IProjectGenerator
 {
-    public interface IProjectGenerator
-    {
-        IProject Generate(int projectIndex);
-    }
+    IProject Generate(int projectIndex);
 }

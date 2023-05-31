@@ -2,7 +2,7 @@
 
 new SolutionGenerator().Generate(
     projectCount: 20,
-    new SdkProjectGenerator("netcoreapp2.1"),
+    new SdkProjectGenerator("net7.0"),
     new IProjectModifier[]
     {
         new CSharpClassFileCreator(itemCount: 10),

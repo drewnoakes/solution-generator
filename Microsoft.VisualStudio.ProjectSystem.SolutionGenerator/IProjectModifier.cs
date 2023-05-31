@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace Microsoft.VisualStudio.ProjectSystem.SolutionGeneration
+namespace Microsoft.VisualStudio.ProjectSystem.SolutionGeneration;
+
+public interface IProjectModifier
 {
-    public interface IProjectModifier
-    {
-        void Modify(IProject project, IReadOnlyList<IProject> priorProjects, string solutionPath);
-    }
+    void Modify(IProject project, IReadOnlyList<IProject> priorProjects, string solutionPath);
 }
