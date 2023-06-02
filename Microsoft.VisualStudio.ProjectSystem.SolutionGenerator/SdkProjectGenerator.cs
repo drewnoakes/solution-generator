@@ -5,7 +5,7 @@ using System.Xml.Linq;
 namespace Microsoft.VisualStudio.ProjectSystem.SolutionGeneration;
 
 public sealed class SdkProjectGenerator(
-    string targetFrameworks,
+    string? targetFrameworks = null,
     string projectExtension = "csproj",
     string sdk = "Microsoft.NET.Sdk")
     : IProjectGenerator
@@ -26,7 +26,7 @@ public sealed class SdkProjectGenerator(
         public Guid ProjectGuid { get; }
         public XDocument ProjectXml { get; }
 
-        public SdkProject(int projectIndex, string targetFrameworks, Guid projectType, string projectExtension, string sdk)
+        public SdkProject(int projectIndex, string? targetFrameworks, Guid projectType, string projectExtension, string sdk)
         {
             ProjectType = projectType;
 
@@ -44,19 +44,19 @@ public sealed class SdkProjectGenerator(
 
             if (!string.IsNullOrWhiteSpace(targetFrameworks))
             {
-                AddProperty(new XElement(targetFrameworks.IndexOf(';') == -1 ? "TargetFramework" : "TargetFrameworks", targetFrameworks));
+                AddProperty(new XElement(!targetFrameworks.Contains(';') ? "TargetFramework" : "TargetFrameworks", targetFrameworks));
             }
         }
 
-        private XElement _itemGroup;
-        private XElement _propertyGroup;
+        private XElement? _itemGroup;
+        private XElement? _propertyGroup;
 
         public void AddProperty(XElement property)
         {
             if (_propertyGroup == null)
             {
                 _propertyGroup = new XElement("PropertyGroup");
-                ProjectXml.Root.Add(_propertyGroup);
+                ProjectXml.Root?.Add(_propertyGroup);
             }
 
             _propertyGroup.Add(property);
@@ -67,7 +67,7 @@ public sealed class SdkProjectGenerator(
             if (_itemGroup == null)
             {
                 _itemGroup = new XElement("ItemGroup");
-                ProjectXml.Root.Add(_itemGroup);
+                ProjectXml.Root?.Add(_itemGroup);
             }
 
             _itemGroup.Add(item);

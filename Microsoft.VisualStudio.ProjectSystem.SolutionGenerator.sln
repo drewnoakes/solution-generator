@@ -1,11 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2019
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.33731.495
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.VisualStudio.ProjectSystem.SolutionGeneration", "Microsoft.VisualStudio.ProjectSystem.SolutionGenerator\Microsoft.VisualStudio.ProjectSystem.SolutionGeneration.csproj", "{9961AD6C-0094-45E9-A2E2-F1EBEDF98210}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.VisualStudio.ProjectSystem.SolutionGeneration.Console", "Microsoft.VisualStudio.ProjectSystem.SolutionGenerator.Console\Microsoft.VisualStudio.ProjectSystem.SolutionGeneration.Console.csproj", "{CE21BC6F-BA9C-42C5-8765-F71F1AEBBCBA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.VisualStudio.ProjectSystem.SolutionGeneration.Console", "Microsoft.VisualStudio.ProjectSystem.SolutionGenerator.Console\Microsoft.VisualStudio.ProjectSystem.SolutionGeneration.Console.csproj", "{CE21BC6F-BA9C-42C5-8765-F71F1AEBBCBA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4EB0F4F6-6E00-477C-9092-4BD8F5E4660D}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

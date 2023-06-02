@@ -8,7 +8,7 @@ namespace Microsoft.VisualStudio.ProjectSystem.SolutionGeneration;
 
 public sealed class SolutionGenerator
 {
-    public void Generate(int projectCount, IProjectGenerator generator, IEnumerable<IProjectModifier> modifiers, string solutionPath)
+    public void Generate(string solutionPath, int projectCount, IProjectGenerator generator, IEnumerable<IProjectModifier> modifiers, IEnumerable<IPostStep>? postSteps = null)
     {
         var projects = new List<IProject>();
 
@@ -31,6 +31,14 @@ public sealed class SolutionGenerator
         }
 
         WriteSolutionFile();
+
+        if (postSteps is not null)
+        {
+            foreach (var postStep in postSteps)
+            {
+                postStep.Go(solutionPath);
+            }
+        }
 
         void WriteSolutionFile()
         {

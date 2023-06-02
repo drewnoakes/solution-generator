@@ -1,14 +1,18 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Xml.Linq;
 
 namespace Microsoft.VisualStudio.ProjectSystem.SolutionGeneration;
 
-public class MaximalProjectToProjectReferences : IProjectModifier
+public class SequentialProjectToProjectReferences : IProjectModifier
 {
     public void Modify(IProject project, IReadOnlyList<IProject> priorProjects, string solutionPath)
     {
-        foreach (var priorProject in priorProjects)
+        if (priorProjects.Count == 0)
+            return;
+
+        IProject priorProject = priorProjects[^1];
+
+        if (priorProject is not null)
         {
             project.AddItem(new XElement("ProjectReference",
                 new XAttribute("Include",
